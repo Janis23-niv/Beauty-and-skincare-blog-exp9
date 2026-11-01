@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="glowApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nivila Glow & Grace | Beauty & Skincare</title>
+
+    <!-- AngularJS Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #fff8fa;
+            color: #49323b;
+            line-height: 1.6;
+        }
+
+        /* Announcement Bar */
+        .announcement {
+            background: #6d263f;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-size: 13px;
+            letter-spacing: 1px;
+        }
+
+        /* Header */
+        header {
+            background: #fff;
+            padding: 20px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #f3dce5;
+        }
+
+        .logo {
+            color: #a43d63;
+            font-size: 27px;
+            font-family: Georgia, serif;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #c08a79;
+        }
+
+        .tagline {
+            font-size: 12px;
+            color: #987783;
+            letter-spacing: 2px;
+        }
+
+        /* Navigation */
+        nav {
+            background: #f9e7ed;
+            padding: 14px 10px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        nav a {
+            display: inline-block;
+            color: #71314a;
+            text-decoration: none;
+            margin: 5px 15px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #c04e79;
+        }
+
+        /* Main Page Content */
+        .page {
+            min-height: 65vh;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(120deg, #f9e3eb, #fff7f0);
+            padding: 65px 8%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 35px;
+            flex-wrap: wrap;
+        }
+
+        .hero-content {
+            flex: 1 1 300px;
+        }
+
+        .eyebrow {
+            color: #b66c83;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .hero h1 {
+            font-family: Georgia, serif;
+            font-size: clamp(35px, 5vw, 57px);
+            line-height: 1.2;
+            color: #6d263f;
+            margin: 18px 0;
+        }
+
+        .hero h1 span {
+            color: #bd7f88;
+            font-style: italic;
+        }
+
+        .hero p {
+            color: #775d67;
+            max-width: 480px;
+            margin-bottom: 25px;
+        }
+
+        .hero-art {
+            flex: 1 1 250px;
+            min-height: 270px;
+            border-radius: 150px 150px 25px 25px;
+            background: linear-gradient(145deg, #e8b8c8, #f7e1d6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 100px;
+            box-shadow: 0 15px 35px #d9a7b955;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #a43d63;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #6d263f;
+            transform: translateY(-2px);
+        }
+
+        .btn-light {
+            background: white;
+            color: #a43d63;
+            border: 1px solid #e5b5c6;
+        }
+
+        /* Section Headings */
+        .section {
+            padding: 55px 8%;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section-heading h2 {
+            font-family: Georgia, serif;
+            font-size: 32px;
+            color: #6d263f;
+        }
+
+        .section-heading p {
+            color: #987783;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        /* Feature Cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px 20px;
+            text-align: center;
+            border: 1px solid #f1dce4;
+            border-radius: 15px;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 25px #d5a7b622;
+        }
+
+        .card-icon {
+            font-size: 45px;
+            margin-bottom: 12px;
+        }
+
+        .card h3 {
+            color: #8e3657;
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            color: #806d74;
+            font-size: 14px;
+        }
+
+        /* Inner Pages */
+        .inner-banner {
+            background: linear-gradient(120deg, #f8dfe8, #fff4ee);
+            text-align: center;
+            padding: 45px 15px;
+        }
+
+        .inner-banner h1 {
+            font-family: Georgia, serif;
+            color: #6d263f;
+            font-size: 36px;
+        }
+
+        .inner-banner p {
+            color: #987783;
+            margin-top: 8px;
+        }
+
+        /* Registration Form */
+        .form-card {
+            max-width: 620px;
+            margin: 35px auto;
+            padding: 35px;
+            background: white;
+            border: 1px solid #f0d8e1;
+            border-radius: 20px;
+            box-shadow: 0 12px 35px #c78da31c;
+        }
+
+        .form-card h2 {
+            font-family: Georgia, serif;
+            color: #8e3657;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .form-intro {
+            text-align: center;
+            color: #987783;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .field {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #714255;
+        }
+
+        input:not([type="radio"]),
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e7c9d5;
+            border-radius: 8px;
+            background: #fffafb;
+            color: #49323b;
+            outline: none;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #bd6688;
+            box-shadow: 0 0 0 3px #f9e7ed;
+        }
+
+        .gender-box {
+            display: flex;
+            gap: 20px;
+            padding: 8px 0;
+        }
+
+        .gender-box label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: normal;
+        }
+
+        .gender-box input {
+            accent-color: #a43d63;
+        }
+
+        .error {
+            color: #c03955;
+            font-size: 12px;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .success-box {
+            background: #eaf8ef;
+            border: 1px solid #a9dbb8;
+            color: #246b3c;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .submit-btn {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .submit-btn:disabled {
+            background: #c6a7b2;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Tips */
+        .tip-list {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .tip {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #bd7f98;
+            box-shadow: 0 4px 15px #d5a7b622;
+        }
+
+        .tip h3 {
+            color: #8e3657;
+            margin-bottom: 5px;
+        }
+
+        /* Footer */
+        footer {
+            background: #542033;
+            color: #fbeaf0;
+            text-align: center;
+            padding: 30px 15px;
+        }
+
+        footer h2 {
+            font-family: Georgia, serif;
+            margin-bottom: 8px;
+        }
+
+        footer p {
+            font-size: 13px;
+            color: #e8c8d3;
+        }
+
+        .footer-links {
+            margin: 15px 0;
+        }
+
+        .footer-links a {
+            color: #fbeaf0;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 13px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 750px) {
+            header {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .hero {
+                padding: 40px 6%;
+            }
+
+            .hero-art {
+                min-height: 210px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 40px 6%;
+            }
+
+            nav a {
+                margin: 5px 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .form-card {
+                padding: 22px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .inner-banner h1 {
+                font-size: 29px;
+            }
+        }
+    </style>
+</head>
+
+<body ng-controller="mainController">
+
+    <!-- Announcement -->
+    <div class="announcement">
+        ✨ YOUR DAILY DOSE OF BEAUTY, CARE & CONFIDENCE ✨
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div>
+            <div class="logo">Nivila <span>Glow & Grace</span></div>
+            <div class="tagline">BEAUTY • SKINCARE • SELF-LOVE</div>
+        </div>
+        <a href="#!/register" class="btn">Join Our Community ♡</a>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#!/" ng-class="{'active': currentPage === 'home'}">
+            Home
+        </a>
+
+        <a href="#!/beauty" ng-class="{'active': currentPage === 'beauty'}">
+            Beauty Tips
+        </a>
+
+        <a href="#!/products" ng-class="{'active': currentPage === 'products'}">
+            Products
+        </a>
+
+        <a href="#!/register" ng-class="{'active': currentPage === 'register'}">
+            Register
+        </a>
+    </nav>
+
+    <!-- AngularJS loads the selected page here -->
+    <main class="page" ng-view></main>
+
+    <!-- Footer -->
+    <footer>
+        <h2>Nivila Glow & Grace ♡</h2>
+        <p>Your beauty journey begins with self-care.</p>
+
+        <div class="footer-links">
+            <a href="#!/">Home</a>
+            <a href="#!/beauty">Beauty Tips</a>
+            <a href="#!/products">Products</a>
+            <a href="#!/register">Join Us</a>
+        </div>
+
+        <p>© 2026 Nivila Glow & Grace | Beauty & Skincare</p>
+    </footer>
+
+
+    <!-- HOME PAGE -->
+    <script type="text/ng-template" id="home.html">
+
+        <section class="hero">
+            <div class="hero-content">
+                <div class="eyebrow">A little self-care goes a long way</div>
+
+                <h1>
+                    Your Skin.<br>
+                    Your Glow.<br>
+                    <span>Your Story.</span>
+                </h1>
+
+                <p>
+                    Discover skincare essentials, simple beauty rituals
+                    and little moments of self-love designed to bring
+                    out your natural radiance.
+                </p>
+
+                <a href="#!/products" class="btn">Explore Beauty →</a>
+                <a href="#!/beauty" class="btn btn-light">Beauty Tips</a>
+            </div>
+
+            <div class="hero-art">
+                🌸
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <div class="eyebrow">Your beauty ritual</div>
+                <h2>Little Things, Lovely Glow</h2>
+                <p>Build a routine that makes you feel good inside and out.</p>
+            </div>
+
+            <div class="cards">
+                <div class="card">
+                    <div class="card-icon">🫧</div>
+                    <h3>Gentle Cleansing</h3>
+                    <p>Keep your skin clean with a cleanser suitable for your skin type.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🌷</div>
+                    <h3>Deep Hydration</h3>
+                    <p>Use a suitable moisturizer to help keep your skin hydrated.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">☀️</div>
+                    <h3>Daily Protection</h3>
+                    <p>Make sunscreen an important part of your daytime routine.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" style="background:#f9eaf0;text-align:center;">
+            <div class="section-heading">
+                <h2>Ready to Begin Your Glow Journey?</h2>
+                <p>Join our beauty community and explore your skincare routine.</p>
+            </div>
+
+            <a href="#!/register" class="btn">Create Your Profile ♡</a>
+        </section>
+
+    </script>
+
+
+    <!-- BEAUTY TIPS PAGE -->
+    <script type="text/ng-template" id="beauty.html">
+
+        <section class="inner-banner">
+            <div class="eyebrow">A little wisdom for your skin</div>
+            <h1>The Beauty Journal 🌷</h1>
+            <p>Simple habits for your everyday self-care routine.</p>
+        </section>
+
+        <section class="section">
+            <div class="tip-list">
+
+                <div class="tip">
+                    <h3>01. Cleanse Gently 🫧</h3>
+                    <p>Wash your face with a gentle cleanser suitable for your skin type.</p>
+                </div>
+
+                <div class="tip">
+                    <h3>02. Keep Your Skin Hydrated 💧</h3>
+                    <p>Use a moisturizer that suits your skin and helps maintain hydration.</p>
+                </div>
+
+                <div class="tip">
+                    <h3>03. Never Skip Sunscreen ☀️</h3>
+                    <p>Use broad-spectrum SPF 30 or higher sunscreen during the day.</p>
+                </div>
+
+                <div class="tip">
+                    <h3>04. Be Consistent 🌸</h3>
+                    <p>A simple routine followed regularly is often better than frequently changing products.</p>
+                </div>
+
+                <div class="tip">
+                    <h3>05. Give Yourself Time ♡</h3>
+                    <p>Introduce new products gradually and stop using products that irritate your skin.</p>
+                </div>
+
+            </div>
+        </section>
+
+    </script>
+
+
+    <!-- PRODUCTS PAGE -->
+    <script type="text/ng-template" id="products.html">
+
+        <section class="inner-banner">
+            <div class="eyebrow">Your skincare essentials</div>
+            <h1>The Beauty Shelf ✨</h1>
+            <p>Discover the basic products that can support your routine.</p>
+        </section>
+
+        <section class="section">
+            <div class="cards">
+
+                <div class="card">
+                    <div class="card-icon">🫧</div>
+                    <h3>Gentle Cleanser</h3>
+                    <p>Helps remove dirt, sweat and excess oil.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">💧</div>
+                    <h3>Hydrating Serum</h3>
+                    <p>Choose ingredients that suit your skincare needs.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🌷</div>
+                    <h3>Moisturizer</h3>
+                    <p>Helps maintain the skin's moisture barrier.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">☀️</div>
+                    <h3>Sunscreen</h3>
+                    <p>Helps protect your skin from harmful UV radiation.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🌙</div>
+                    <h3>Night Care</h3>
+                    <p>Follow a gentle nighttime cleansing and moisturizing routine.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🪷</div>
+                    <h3>Lip Care</h3>
+                    <p>Keep lips comfortable with a suitable lip balm.</p>
+                </div>
+
+            </div>
+        </section>
+
+    </script>
+
+
+    <!-- REGISTRATION PAGE -->
+    <script type="text/ng-template" id="register.html">
+
+        <section class="inner-banner">
+            <div class="eyebrow">Let's get to know you</div>
+            <h1>Your Beauty Profile ♡</h1>
+            <p>Create your profile and begin your Glow & Grace journey.</p>
+        </section>
+
+        <section class="section">
+
+            <div class="form-card">
+
+                <h2>Join Our Beauty Community</h2>
+
+                <p class="form-intro">
+                    Fill in your details below.<br>
+                    Fields marked * are required.
+                </p>
+
+                <form name="regForm"
+                      ng-submit="submitForm()"
+                      novalidate>
+
+                    <div class="form-row">
+
+                        <div class="field">
+                            <label>Full Name *</label>
+
+                            <input type="text"
+                                   name="username"
+                                   ng-model="user.name"
+                                   ng-pattern="/^[A-Za-z ]+$/"
+                                   placeholder="Enter your name"
+                                   required>
+
+                            <span class="error"
+                                  ng-show="regForm.username.$touched &&
+                                           regForm.username.$error.required">
+                                Name is required.
+                            </span>
+
+                            <span class="error"
+                                  ng-show="regForm.username.$touched &&
+                                           regForm.username.$error.pattern">
+                                Use letters and spaces only.
+                            </span>
+                        </div>
+
+                        <div class="field">
+                            <label>Password *</label>
+
+                            <input type="password"
+                                   name="password"
+                                   ng-model="user.password"
+                                   ng-pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}$/"
+                                   placeholder="Create a password"
+                                   required>
+
+                            <span class="error"
+                                  ng-show="regForm.password.$touched &&
+                                           regForm.password.$invalid">
+                                Use 8+ characters with uppercase,
+                                lowercase and a number.
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="form-row">
+
+                        <div class="field">
+                            <label>Age *</label>
+
+                            <input type="number"
+                                   name="age"
+                                   ng-model="user.age"
+                                   min="18"
+                                   max="100"
+                                   step="1"
+                                   placeholder="Enter your age"
+                                   required>
+
+                            <span class="error"
+                                  ng-show="regForm.age.$touched &&
+                                           regForm.age.$invalid">
+                                Enter a whole-number age of 18 or above.
+                            </span>
+                        </div>
+
+                        <div class="field">
+                            <label>Mobile Number *</label>
+
+                            <input type="text"
+                                   name="mobile"
+                                   ng-model="user.mobile"
+                                   ng-pattern="/^[0-9]{10}$/"
+                                   placeholder="10-digit mobile number"
+                                   required>
+
+                            <span class="error"
+                                  ng-show="regForm.mobile.$touched &&
+                                           regForm.mobile.$invalid">
+                                Enter exactly 10 digits.
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="field">
+                        <label>Email Address *</label>
+
+                        <input type="email"
+                               name="email"
+                               ng-model="user.email"
+                               placeholder="you@example.com"
+                               required>
+
+                        <span class="error"
+                              ng-show="regForm.email.$touched &&
+                                       regForm.email.$invalid">
+                            Enter a valid email address.
+                        </span>
+                    </div>
+
+                    <div class="field">
+                        <label>Gender *</label>
+
+                        <div class="gender-box">
+
+                            <label>
+                                <input type="radio"
+                                       name="gender"
+                                       ng-model="user.gender"
+                                       value="Female"
+                                       required>
+                                Female
+                            </label>
+
+                            <label>
+                                <input type="radio"
+                                       name="gender"
+                                       ng-model="user.gender"
+                                       value="Male"
+                                       required>
+                                Male
+                            </label>
+
+                            <label>
+                                <input type="radio"
+                                       name="gender"
+                                       ng-model="user.gender"
+                                       value="Other"
+                                       required>
+                                Other
+                            </label>
+
+                        </div>
+
+                        <span class="error"
+                              ng-show="regForm.gender.$touched &&
+                                       regForm.gender.$invalid">
+                            Please select your gender.
+                        </span>
+                    </div>
+
+                    <div class="field">
+                        <label>State *</label>
+
+                        <select name="state"
+                                ng-model="user.state"
+                                required>
+
+                            <option value="">Choose your state</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Kerala">Kerala</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                            <option value="Other">Other</option>
+
+                        </select>
+
+                        <span class="error"
+                              ng-show="regForm.state.$touched &&
+                                       regForm.state.$invalid">
+                            Please select a state.
+                        </span>
+                    </div>
+
+                    <button type="submit"
+                            class="btn submit-btn"
+                            ng-disabled="regForm.$invalid">
+                        Create My Beauty Profile ♡
+                    </button>
+
+                </form>
+
+                <div class="success-box" ng-if="message">
+                    <h3>🌸 Welcome to Glow & Grace!</h3>
+                    <p>{{message}}</p>
+                    <p><b>Name:</b> {{user.name}}</p>
+                    <p><b>Email:</b> {{user.email}}</p>
+                    <p><b>Skin journey:</b> Your beauty journey starts here!</p>
+                </div>
+
+            </div>
+
+        </section>
+
+    </script>
+
+
+    <!-- ANGULARJS APPLICATION -->
+    <script>
+        var app = angular.module("glowApp", ["ngRoute"]);
+
+        // Configure routing between four pages
+        app.config(function($routeProvider) {
+
+            $routeProvider
+
+                .when("/", {
+                    templateUrl: "home.html"
+                })
+
+                .when("/beauty", {
+                    templateUrl: "beauty.html"
+                })
+
+                .when("/products", {
+                    templateUrl: "products.html"
+                })
+
+                .when("/register", {
+                    templateUrl: "register.html"
+                })
+
+                .otherwise({
+                    redirectTo: "/"
+                });
+        });
+
+
+        // Main Controller
+        app.controller("mainController", function($scope, $location) {
+
+            $scope.user = {};
+            $scope.message = "";
+
+            // Update active navigation link
+            function updatePage() {
+                var path = $location.path();
+
+                if (path === "/beauty") {
+                    $scope.currentPage = "beauty";
+                } else if (path === "/products") {
+                    $scope.currentPage = "products";
+                } else if (path === "/register") {
+                    $scope.currentPage = "register";
+                } else {
+                    $scope.currentPage = "home";
+                }
+            }
+
+            updatePage();
+
+            $scope.$on("$routeChangeSuccess", function() {
+                updatePage();
+            });
+
+            // Registration submit handler
+            $scope.submitForm = function() {
+
+                $scope.message =
+                    "Your registration was completed successfully.";
+            };
+        });
+    </script>
+
+</body>
+</html>
